@@ -1,7 +1,7 @@
 <template>
   <nav
     style="width: 100%"
-    class="p-1 flex border-round-md cursor-pointer align-items-center surface-200"
+    class="p-1 shadow-4 flex border-round-md cursor-pointer align-items-center surface-200"
   >
     <div v-tooltip.top="'Home'" class="p-2 border-round-md hover:surface-300">
       <i class="pi pi-fw pi-home text-3xl" />

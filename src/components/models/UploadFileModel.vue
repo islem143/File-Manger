@@ -1,5 +1,5 @@
 <template>
-  <BaseModel header="Upload File">
+  <BaseModel @confirm="$emit('upload-file', file)" header="Upload File">
     <form class="">
       <FileUpload
         mode="basic"

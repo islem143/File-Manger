@@ -10,7 +10,7 @@
   >
     <slot></slot>
     <template #footer>
-      <Button label="Ok" icon="pi pi-check" @click="visible = false" autofocus />
+      <Button label="Ok" icon="pi pi-check" @click="confirmF" autofocus />
     </template>
   </Dialog>
 </template>
@@ -18,6 +18,10 @@
 <script setup>
 import { ref } from 'vue'
 defineProps(['header'])
-
+const emit = defineEmits(['confirm'])
 const visible = ref(true)
+const confirmF = () => {
+  visible.value = false
+  emit('confirm')
+}
 </script>
