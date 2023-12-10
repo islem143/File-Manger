@@ -25,7 +25,7 @@ import { ref, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { sortFilesAndFolders } from '../utils/utils'
 const toast = useToast()
-
+let id = ref(2)
 const show = (detail) => {
   toast.add({ severity: 'success', summary: 'Info', detail, life: 3000 })
 }
@@ -35,21 +35,23 @@ const map = {
 }
 
 let files = ref([
-  { type: 'folder', title: 'Folder 1', extension: 'folder' },
-  { type: 'file', title: 'File1', extension: 'word' }
+  { id: 1, type: 'folder', title: 'Folder 1', extension: 'folder' },
+  { id: 2, type: 'file', title: 'File1', extension: 'word' }
 ])
 
 watch(files.value, (files) => {
   files = [...sortFilesAndFolders(files)]
 })
 const addFolder = (name) => {
-  files.value.push({ type: 'folder', title: name, extension: 'folder' })
+  id.value = id.value + 1
+  files.value.push({ id: id.value, type: 'folder', title: name, extension: 'folder' })
   show('Folder Added')
 }
 const uploadFile = () => {
   files.value.push({ type: 'file', title: 'File', extension: 'pdf' })
   show('File uploaded')
 }
+
 const currentModel = ref(null)
 const showModel = (type) => {
   currentModel.value = map[type]

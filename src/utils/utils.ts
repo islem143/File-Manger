@@ -1,4 +1,5 @@
 interface Filee {
+  id: number
   type: string
   title: string
   extension: string
@@ -14,4 +15,8 @@ export const sortFilesAndFolders = (files: Filee[]): any => {
     }
     return 0
   })
+}
+
+export const deleteFile = (files: Filee[], id: number): any => {
+  return files.filter((f) => f.id != id)
 }

@@ -5,9 +5,7 @@
       class="col-2"
       v-for="f in files"
       :key="f.title"
-      :type="f.type"
-      :extension="f.extension"
-      :title="f.title"
+      :file="f"
     ></FileLayout>
   </div>
   <ContextMenu ref="menu" :model="items" />
@@ -20,10 +18,20 @@ defineProps(['files'])
 const menu = ref()
 const items = ref([
   { label: 'Download', icon: 'pi pi-download' },
-  { label: 'Delete', icon: 'pi pi-times' }
+  {
+    label: 'Delete',
+    icon: 'pi pi-times',
+    command() {
+      console.log('clicked delete')
+    }
+  }
 ])
+const onRightClick = (event, user) => {
+  console.log(event, user)
+}
 
-const openContextMenu = (event) => {
+const openContextMenu = (event, file) => {
+  console.log(file)
   menu.value.show(event)
 }
 </script>
