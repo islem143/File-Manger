@@ -14,7 +14,9 @@
 <script setup>
 import { ref } from 'vue'
 import FileLayout from './FileLayout.vue'
+import { SELECTION_STATE } from '../constants/types'
 defineProps(['files'])
+const emit = defineEmits(['open-context-menu'])
 const menu = ref()
 const items = ref([
   { label: 'Download', icon: 'pi pi-download' },
@@ -22,7 +24,7 @@ const items = ref([
     label: 'Delete',
     icon: 'pi pi-times',
     command() {
-      console.log('clicked delete')
+      emit('delete-file', SELECTION_STATE['CURRENT'])
     }
   }
 ])
@@ -31,7 +33,7 @@ const onRightClick = (event, user) => {
 }
 
 const openContextMenu = (event, file) => {
-  console.log(file)
+  emit('set-current-file', file)
   menu.value.show(event)
 }
 </script>

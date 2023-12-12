@@ -28,6 +28,7 @@
 
 <script setup>
 defineEmits(['show-model'])
+
 </script>
 
 <style scoped></style>

@@ -3,7 +3,12 @@
     <div class="container shadow-8 border-round-md flex flex-column justify-content-start">
       <Toolbar @showModel="showModel" class="toolbar" />
       <div class="p-5">
-        <Files :files="files"></Files>
+        <Files
+          :files="files"
+          @set-current-file="setCurrentFile"
+          :currentSelectedFile="currentSelectedFile"
+          @delete-file="deleteFile"
+        ></Files>
       </div>
       <component
         @add-folder="addFolder"
@@ -16,44 +21,67 @@
   <Toast />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Toolbar from '../components/Toolbar.vue'
 import AddFolderModel from '../components/models/AddFolderModel.vue'
 import UploadFileModel from '../components/models/UploadFileModel.vue'
 import Files from '../components/Files.vue'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
-import { sortFilesAndFolders } from '../utils/utils'
+import { SELECTION_STATE, type FileInterface } from '../constants/types'
+import type { Ref } from 'vue'
+import { type ModelsType } from '../constants/types'
+
+import FileManager from '../services/FileManager'
+
 const toast = useToast()
 let id = ref(2)
-const show = (detail) => {
+const currentSelectedFile: Ref<FileInterface | null> = ref(null)
+const show = (detail: string) => {
   toast.add({ severity: 'success', summary: 'Info', detail, life: 3000 })
 }
 const map = {
   AddFolderModel,
   UploadFileModel
 }
-
-let files = ref([
-  { id: 1, type: 'folder', title: 'Folder 1', extension: 'folder' },
-  { id: 2, type: 'file', title: 'File1', extension: 'word' }
-])
-
-watch(files.value, (files) => {
-  files = [...sortFilesAndFolders(files)]
-})
-const addFolder = (name) => {
+const files = FileManager.sortedFiles
+function deleteFile(type: number) {
+  switch (type) {
+    case SELECTION_STATE['NONE']:
+      break
+    case SELECTION_STATE['CURRENT']:
+      if (currentSelectedFile.value) {
+        FileManager.deleteFile(currentSelectedFile.value)
+      }
+      break
+    case SELECTION_STATE['ALL']:
+      FileManager.deleteAll()
+      break
+  }
+}
+const addFolder = (name: string) => {
   id.value = id.value + 1
-  files.value.push({ id: id.value, type: 'folder', title: name, extension: 'folder' })
+  FileManager.addFile({
+    id: id.value,
+    type: 'folder',
+    title: name,
+    extension: 'folder'
+  })
+
   show('Folder Added')
 }
-const uploadFile = () => {
-  files.value.push({ type: 'file', title: 'File', extension: 'pdf' })
+const uploadFile = (file: FileInterface) => {
+  console.log(file)
+
+  FileManager.addFile(file)
   show('File uploaded')
 }
 
+const setCurrentFile = (file: FileInterface) => {
+  currentSelectedFile.value = file
+}
 const currentModel = ref(null)
-const showModel = (type) => {
+const showModel = (type: ModelsType) => {
   currentModel.value = map[type]
 }
 const hideModel = () => {
