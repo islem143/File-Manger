@@ -33,6 +33,12 @@ class FileManager implements FileManagerInterace {
   deleteAll(): void {
     this.files.value = []
   }
+  searchFiles(name: string): void {
+  
+    console.log(name);
+    
+    this.files.value.filter((f) => f.title.includes(name))
+  }
 }
 const fileManager = new FileManager()
 

@@ -9,7 +9,13 @@
     <div v-tooltip.top="'Refresh'" class="p-2 border-round-md hover:surface-300">
       <i class="pi pi-fw pi-refresh text-3xl" />
     </div>
-    <InputText class="mx-1" placeholder="Search..." type="text" />
+    <InputText
+      class="mx-1"
+      @value="searchValue"
+      @input="$emit('search',$event)"
+      placeholder="Search..."
+      type="text"
+    />
 
     <div
       @click="$emit('show-model', 'AddFolderModel')"
@@ -27,8 +33,8 @@
 </template>
 
 <script setup>
-defineEmits(['show-model'])
-
+defineEmits(['show-model', 'search'])
+defineProps(['searchValue'])
 </script>
 
 <style scoped></style>

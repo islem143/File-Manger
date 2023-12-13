@@ -1,7 +1,12 @@
 <template>
   <div class="main flex justify-content-center align-items-center">
     <div class="container shadow-8 border-round-md flex flex-column justify-content-start">
-      <Toolbar @showModel="showModel" class="toolbar" />
+      <Toolbar
+        @showModel="showModel"
+        :searchValue="search"
+        @search="handleSearch"
+        class="toolbar"
+      />
       <div class="p-5">
         <Files
           :files="files"
@@ -36,6 +41,7 @@ import FileManager from '../services/FileManager'
 
 const toast = useToast()
 let id = ref(2)
+let search = ref('')
 const currentSelectedFile: Ref<FileInterface | null> = ref(null)
 const show = (detail: string) => {
   toast.add({ severity: 'success', summary: 'Info', detail, life: 3000 })
@@ -75,6 +81,13 @@ const uploadFile = (file: FileInterface) => {
 
   FileManager.addFile(file)
   show('File uploaded')
+}
+
+const handleSearch = (name: string) => {
+  //search.value = name.target.value
+
+  
+  FileManager.searchFiles(name.target.value)
 }
 
 const setCurrentFile = (file: FileInterface) => {
